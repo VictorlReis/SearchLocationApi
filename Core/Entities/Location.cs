@@ -1,2 +1,2 @@
 namespace Core.Entities;
-public record Location(int Id, string Name,string BusinessType, TimeSpan OpeningTime, TimeSpan ClosingTime);
+public record Location(Guid Id, string Name, int OpeningTimeInSeconds, int ClosingTimeInSeconds);
