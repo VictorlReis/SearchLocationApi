@@ -1,3 +1,4 @@
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace SearchLocationApi;
@@ -11,5 +12,4 @@ public class LocationContext : DbContext
     }
 
     public DbSet<Location> Locations { get; set; }
-
 }
