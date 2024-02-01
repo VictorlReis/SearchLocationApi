@@ -1,10 +1,12 @@
+using Core;
+using Core.Repository;
+using Core.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace SearchLocationApi.Extensions;
 
 public static class ApplicationServiceExtensions
 {
-
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("locationSqlite");
@@ -12,5 +14,8 @@ public static class ApplicationServiceExtensions
         {
             options.UseSqlite(connectionString);
         });
+
+        services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<ILocationRepository, LocationRepository>();
     }
 }
