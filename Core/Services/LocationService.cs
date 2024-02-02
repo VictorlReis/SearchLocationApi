@@ -1,6 +1,8 @@
 using Core.DTO;
 using Core.Entities;
 using Core.Repository;
+using Core.Validations;
+using FluentValidation.Results;
 
 namespace Core.Services;
 
@@ -35,5 +37,11 @@ public class LocationService : ILocationService
         
         var createdLocation = await _locationRepository.Create(locationEntity);
         return  LocationDto.FromEntity(createdLocation);
+    }
+    
+    public async Task<ValidationResult> ValidateCreateLocationDto(CreateLocationDto createLocationDto)
+    {
+        var validator = new CreateLocationDtoValidator();
+        return await validator.ValidateAsync(createLocationDto);
     }
 }

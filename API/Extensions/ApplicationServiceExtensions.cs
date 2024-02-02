@@ -1,6 +1,8 @@
 using Core;
 using Core.Repository;
 using Core.Services;
+using Core.Validations;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace SearchLocationApi.Extensions;
@@ -17,5 +19,6 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<ILocationRepository, LocationRepository>();
+        services.AddValidatorsFromAssemblyContaining<CreateLocationDtoValidator>();
     }
 }

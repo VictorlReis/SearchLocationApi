@@ -23,8 +23,4 @@ public class LocationDto
             openingTime: TimeSpan.FromSeconds(location.OpeningTimeInSeconds),
             closingTime: TimeSpan.FromSeconds(location.ClosingTimeInSeconds));
     }
-    public Location ToEntity()
-    {
-        return new Location(Id, Name, (long)OpeningTime.TotalSeconds, (long)ClosingTime.TotalSeconds);
-    }
 }

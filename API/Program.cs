@@ -34,6 +34,12 @@ app.MapGet("/locations", async (ILocationService locationService) =>
 
 app.MapPost("/locations", async (ILocationService locationService, CreateLocationDto createLocationDto) =>
 {
+    var validationResult = await locationService.ValidateCreateLocationDto(createLocationDto);
+
+    if (!validationResult.IsValid)
+    {
+        return Results.BadRequest(validationResult.Errors);
+    }
     var locationDto = await locationService.CreateLocation(createLocationDto);
 
     return Results.Created($"/locations/{locationDto.Name}", locationDto);
