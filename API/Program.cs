@@ -17,8 +17,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/locations", async (ILocationService locationService) => 
-        await locationService.GetLocationsWithAvailability(new TimeSpan(10, 0, 0), new TimeSpan(13, 0, 0))).
-    WithName("GetLocations").WithOpenApi();
+app.MapGet("/locations", async (ILocationService locationService) =>
+{
+    var locations = await locationService.GetLocationsWithAvailability(new TimeSpan(10, 0, 0), new TimeSpan(13, 0, 0));
+
+    return locations.Any() ? Results.Ok(locations) :
+        Results.NoContent();
+}).WithName("GetLocations").WithOpenApi();
 
 app.Run();

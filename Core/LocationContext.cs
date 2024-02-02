@@ -7,9 +7,10 @@ public sealed class LocationContext : DbContext
 {
     public LocationContext(DbContextOptions<LocationContext> options) : base(options)
     {
-        // Ensure the database and table are created
         Database.EnsureCreated();
+        //Seed.Initialize(this);
     }
+
 
     public DbSet<Location> Locations { get; set; }
 }

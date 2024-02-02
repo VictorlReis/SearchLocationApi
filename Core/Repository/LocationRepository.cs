@@ -12,13 +12,7 @@ public class LocationRepository : ILocationRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Location>> GetLocationsWithAvailability(long openingTimeInSeconds, long closingTimeInSeconds)
-    {
-        var locations = await _context.Locations
-            .Where(l => l.OpeningTimeInSeconds <= openingTimeInSeconds
-                        && l.ClosingTimeInSeconds >= closingTimeInSeconds)
-            .ToListAsync();
-
-        return locations;
-    }
+    public async Task<IEnumerable<Location>> GetLocationsWithAvailability(long openingTimeInSeconds, long closingTimeInSeconds) => 
+        await _context.Locations.Where(l => l.OpeningTimeInSeconds <= closingTimeInSeconds 
+                                               && l.ClosingTimeInSeconds >= openingTimeInSeconds).ToListAsync();
 } 
