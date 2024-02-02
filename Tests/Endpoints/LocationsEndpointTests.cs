@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text.Json;
 using Core.DTO;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -13,36 +14,35 @@ public class LocationsEndpointTests
     {
         _locationService = new Mock<ILocationService>();
     }
+    
     [Fact]
-    public async Task GetLocations_ReturnsOkResult_WhenLocationsAvailable()
+    public async Task GetLocations_ReturnsStatus200AndNonEmptyContent()
     {
-        _locationService.Setup(service =>
-                service.GetLocationsWithAvailability(It.IsAny<TimeSpan>(), It.IsAny<TimeSpan>()))
-            .ReturnsAsync(new List<LocationDto>(new List<LocationDto>()
-            {
-                new (Guid.NewGuid(), "BarberShop Two", TimeSpan.FromHours(9), TimeSpan.FromHours(17)),
-            }));
+        await using var application = new PlaygroundApplication();
+        using var client = application.CreateClient();
+        
+        var response = await client.GetAsync("/locations");
+        var contentString = await response.Content.ReadAsStringAsync();
 
-        await using var application = new WebApplicationFactory<Program>();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotEmpty(contentString);
+    }
+    
+    [Fact]
+    public async Task GetLocations_ReturnsStatus200AndEmptyContent_WhenNoLocations()
+    {
+        await using var application = new PlaygroundApplication();
         using var client = application.CreateClient();
 
         var response = await client.GetAsync("/locations");
 
         response.EnsureSuccessStatusCode();
-    }
-    
-    [Fact]
-    public async Task GetLocations_ReturnsNoContent_WhenLocationsIsEmpty()
-    {
-        var mockLocationService = new Mock<ILocationService>();
-        mockLocationService.Setup(service =>
-                service.GetLocationsWithAvailability(It.IsAny<TimeSpan>(), It.IsAny<TimeSpan>()))
-            .ReturnsAsync(new List<LocationDto>());
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        await using var application = new WebApplicationFactory<Program>();
-        using var client = application.CreateClient();
+        var contentString = await response.Content.ReadAsStringAsync();
+        var locations = JsonSerializer.Deserialize<List<LocationDto>>(contentString);
 
-        var response = await client.GetAsync("/locations");
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.NotNull(locations);
+        Assert.Empty(locations);
     }
 }
