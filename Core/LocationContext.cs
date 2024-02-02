@@ -8,7 +8,7 @@ public sealed class LocationContext : DbContext
     public LocationContext(DbContextOptions<LocationContext> options) : base(options)
     {
         Database.EnsureCreated();
-        //Seed.Initialize(this);
+        Seed.Initialize(this);
     }
 
 
