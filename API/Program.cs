@@ -1,5 +1,8 @@
+using System.Runtime.CompilerServices;
 using Core.Services;
 using SearchLocationApi.Extensions;
+
+[assembly: InternalsVisibleTo("Tests")]
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,3 +29,4 @@ app.MapGet("/locations", async (ILocationService locationService) =>
 }).WithName("GetLocations").WithOpenApi();
 
 app.Run();
+public partial class Program { }
