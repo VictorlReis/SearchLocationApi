@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Core.DTO;
 using Core.Services;
 using SearchLocationApi.Extensions;
 
@@ -29,6 +30,14 @@ app.MapGet("/locations", async (ILocationService locationService) =>
     return locationDtos.Any() ? Results.Ok(locationDtos) :
         Results.NotFound("There is no location available for this range");
 }).WithName("GetLocations").WithOpenApi();
+
+
+app.MapPost("/locations", async (ILocationService locationService, CreateLocationDto createLocationDto) =>
+{
+    var locationDto = await locationService.CreateLocation(createLocationDto);
+
+    return Results.Created($"/locations/{locationDto.Name}", locationDto);
+}).WithName("CreateLocation").WithOpenApi();
 
 app.Run();
 public partial class Program { }

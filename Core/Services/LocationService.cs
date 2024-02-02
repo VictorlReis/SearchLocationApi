@@ -1,4 +1,5 @@
 using Core.DTO;
+using Core.Entities;
 using Core.Repository;
 
 namespace Core.Services;
@@ -22,5 +23,17 @@ public class LocationService : ILocationService
         var locationDtos = locations.Select(LocationDto.FromEntity);
 
         return locationDtos;
+    }
+    
+    public async Task<LocationDto> CreateLocation(CreateLocationDto createLocationDto)
+    {
+        var openingTime = TimeSpan.Parse(createLocationDto.OpeningTime);
+        var closingTime = TimeSpan.Parse(createLocationDto.ClosingTime);
+
+        var locationEntity = new Location(Guid.NewGuid(), createLocationDto.Name, (long)openingTime.TotalSeconds,
+            (long)closingTime.TotalSeconds);
+        
+        var createdLocation = await _locationRepository.Create(locationEntity);
+        return  LocationDto.FromEntity(createdLocation);
     }
 }
