@@ -7,7 +7,7 @@ namespace Core.Validations
     {
         public CreateLocationDtoValidator()
         {
-            RuleFor(dto => dto.Name).NotEmpty().MaximumLength(100); 
+            RuleFor(dto => dto.Name).NotEmpty().WithMessage("Name is required");
             RuleFor(dto => dto.OpeningTime)
             .NotEmpty().WithMessage("Opening time is required.")
             .Must(BeValidTimeFormat).WithMessage("Invalid opening time format. Please use 'hh:mm'.");
