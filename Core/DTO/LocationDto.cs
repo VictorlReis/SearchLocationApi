@@ -4,21 +4,23 @@ namespace Core.DTO;
 
 public class LocationDto
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public TimeSpan OpeningTime { get; set; }
-    public TimeSpan ClosingTime { get; set; }
+    public LocationDto(Guid id, string name, TimeSpan openingTime, TimeSpan closingTime)
+    {
+        Id = id;
+        Name = name;
+        OpeningTime = openingTime;
+        ClosingTime = closingTime;
+    }
 
-    // Additional properties...
+    public Guid Id { get; }
+    public string Name { get; }
+    public TimeSpan OpeningTime { get; }
+    public TimeSpan ClosingTime { get; }
 
     public static LocationDto FromEntity(Location location)
     {
-        return new LocationDto
-        {
-            Id = location.Id,
-            Name = location.Name,
-            OpeningTime = TimeSpan.FromSeconds(location.OpeningTimeInSeconds),
-            ClosingTime = TimeSpan.FromSeconds(location.ClosingTimeInSeconds),
-        };
+        return new LocationDto(id: location.Id, name: location.Name,
+            openingTime: TimeSpan.FromSeconds(location.OpeningTimeInSeconds),
+            closingTime: TimeSpan.FromSeconds(location.ClosingTimeInSeconds));
     }
 }

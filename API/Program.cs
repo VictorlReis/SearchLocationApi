@@ -22,7 +22,8 @@ app.UseHttpsRedirection();
 
 app.MapGet("/locations", async (ILocationService locationService) =>
 {
-    var locations = await locationService.GetLocationsWithAvailability(new TimeSpan(10, 0, 0), new TimeSpan(13, 0, 0));
+    var locations = await locationService
+        .GetLocationsWithAvailability(new TimeSpan(10, 0, 0), new TimeSpan(13, 0, 0));
 
     return locations.Any() ? Results.Ok(locations) :
         Results.NoContent();
